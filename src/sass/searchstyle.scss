@@ -137,13 +137,13 @@ body {
 .custom-button {
     position: absolute;
     right: 90px;
-    bottom: -35px;
+    bottom: 0px;
     display: none;
     align-items: center;
     justify-content: center;
     width: 120px;
     height: 40px;
-    background: crimson;
+    background-color: crimson;
     border-radius: 5px;
     border: none;
     color: white;
@@ -152,9 +152,27 @@ body {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.3s ease;
+    opacity: 0;
+    
+
+    animation-name: slideIn;
+    animation-duration: 0.5s;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+
+
+    @keyframes slideIn {
+        0% {
+          bottom: 30px; /* Начальное положение кнопки */
+        }
+        100% {
+            opacity: 1;
+          bottom: -35; /* Конечное положение кнопки */
+        }
   }
 
-  .custom-button.show {
-    display: flex;
-  }
+}
+
+
+  
