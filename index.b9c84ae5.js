@@ -1,2 +1,0 @@
-const e={btnOne:document.querySelector(".search"),btnTwo:document.querySelector(".custom-button"),inpEl:document.querySelector(".inp-search")};e.btnTwo.addEventListener("click",(e=>{e.preventDefault()})),e.btnOne.addEventListener("click",(t=>{t.preventDefault(),e.btnTwo.style.display="none"})),e.inpEl.addEventListener("click",(t=>{t.preventDefault(),e.btnTwo.style.display="block"}));
-//# sourceMappingURL=index.b9c84ae5.js.map
