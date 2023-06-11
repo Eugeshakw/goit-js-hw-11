@@ -16,6 +16,7 @@ body {
 }
 
 .container {
+    margin-top: 20px;
   position: relative;
   margin: 0 auto;
   top: 0;
@@ -100,6 +101,7 @@ body {
     font-weight: bolder;
     letter-spacing: 0.1em;
     &:hover {
+        
       cursor: pointer;
     }
     &:focus {
@@ -129,7 +131,7 @@ body {
     }
     &::placeholder {
       color: white;
-      opacity: 0.5;
+      opacity: 0.8;
       font-weight: bolder;
     }
   }
@@ -175,4 +177,25 @@ body {
 }
 
 
-  
+.load-more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    
+    background-color: crimson;
+    border-radius: 5px;
+    border: none;
+    color: white;
+    font-family: 'Inconsolata', monospace;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin: 0 auto;
+    transition: all 0.3s ease;
+}
+.load-more:focus,
+.load-more:hover{
+    opacity: 0.5;
+}
