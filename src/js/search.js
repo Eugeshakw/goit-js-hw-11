@@ -9,10 +9,12 @@ const refs = {
 
  refs.btnTwo.addEventListener('click', (e) => {
     e.preventDefault();
+    
  })
   refs.btnOne.addEventListener('click', (e) => {
     e.preventDefault();
     refs.btnTwo.style.display = 'none';
+    
   })
 
   refs.inpEl.addEventListener('click', (e) => {

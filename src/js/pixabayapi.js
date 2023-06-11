@@ -1,15 +1,12 @@
-export {getApi};
-const KEY_API = '37175835-76686085e99d052827f14fa60'
-const BASE_URL = 'https://pixabay.com/api/'
+// export {getApi};
+// const KEY_API = '37175835-76686085e99d052827f14fa60'
+// const BASE_URL = 'https://pixabay.com/api/'
 
-function getApi(query) {
+// function getApi(query) {
+//  const url = `${BASE_URL}/?key=${KEY_API}&q=${query}`
 
-const url = `${BASE_URL}/?key=${KEY_API}&q=${query}`
+//    return fetch(url).then((r) => r.json())
 
-fetch(url)
-.then(r => r.json())
-.then(console.log)
-
-}
+// }
 
 

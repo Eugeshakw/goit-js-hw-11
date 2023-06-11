@@ -1,0 +1,45 @@
+img {
+    height: 200px;
+    width: 300px;
+    max-width: 100%;
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    overflow: hidden;
+    margin: 0 auto;
+    display: block;
+  }
+
+
+  
+  
+  
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    list-style: none;
+    margin: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+
+  }
+
+  .photo-card {
+    display: flex;
+    
+    flex-direction: column;
+    justify-content: center;
+  }
+ 
+  .info{
+    display: flex;
+    align-items: center;
+
+    justify-content: space-between;
+    padding: 1rem;
+  }
+
+  .info-item {
+    margin-right: 10px;
+  }
