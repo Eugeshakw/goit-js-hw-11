@@ -10,7 +10,7 @@ export default class imgAPIServer {
     
     
     getApi() {
-        const url = `${BASE_URL}/?key=${KEY_API}&per_page=30&q=${this.searchValue}&page=${this.page}`
+        const url = `${BASE_URL}/?key=${KEY_API}&per_page=10&q=${this.searchValue}&page=${this.page}`
        
           return fetch(url).then((r) => r.json()).then(data => {
             this.incrementPage()

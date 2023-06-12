@@ -22,7 +22,8 @@ img {
     margin: 0;
     padding-left: 20px;
     padding-right: 20px;
-
+    padding-top: 50px;
+    justify-content: center;
   }
 
   .photo-card {
@@ -43,3 +44,6 @@ img {
   .info-item {
     margin-right: 10px;
   }
+button.hidden{
+  display: none;
+}
