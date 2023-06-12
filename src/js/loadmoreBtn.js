@@ -1,3 +1,5 @@
+import Notiflix from 'notiflix';
+
 export default class loadmoreBtn {
 
     constructor({ selector, isHidden = false }) {
@@ -10,12 +12,12 @@ export default class loadmoreBtn {
     enable() {
         this.button.disabled = false
         this.button.textContent = 'loadMore'
-
+        Notiflix.Loading.remove();
     }
 
     disable() {
         this.button.disabled = true
-        this.button.textContent = 'loading...'
+        Notiflix.Loading.pulse();
     }
 
     show(){

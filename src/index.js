@@ -82,6 +82,7 @@ function generateMarkUp() {
             throw new Error ()
           
         }
+        Notiflix.Notify.success(`found the pictures`)
         console.log(hits.length);
        return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
     })
@@ -125,5 +126,10 @@ function clearList() {
 }
 
 function onError(){
-    Notiflix.Notify.failure('not found');
+    Notiflix.Report.failure(
+        'Not Found',
+        'Sorry, there are no images matching your search query. Please try again.'
+    );
+    Notiflix.Loading.remove();
+    
 }
