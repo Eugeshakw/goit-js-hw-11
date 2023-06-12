@@ -1,7 +1,7 @@
 import Notiflix from 'notiflix';
 // import { getApi } from './js/pixabayapi'
 import  imgAPIServer from './js/newAPIserver'
-// import loadMoreBtn from './js/loadmorebtn'
+import loadmoreBtn from './js/loadmorebtn'
 
 
 
@@ -14,7 +14,7 @@ const refs = {
 
 
 const server   = new imgAPIServer()
-const loadBtn = new loadMoreBtn({
+const loadBtn = new loadmoreBtn({
     selector: '#loadmore',
     isHidden: true
 })
