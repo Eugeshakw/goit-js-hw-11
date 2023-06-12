@@ -1,7 +1,7 @@
 import Notiflix from 'notiflix';
 // import { getApi } from './js/pixabayapi'
 import  imgAPIServer from './js/newAPIserver'
-import loadMoreBtn from './src/js/loadmorebtn'
+import loadMoreBtn from './js/loadmorebtn'
 
 
 
