@@ -1,16 +1,19 @@
 img {
-    height: 200px;
-    width: 300px;
-    max-width: 100%;
-    background-position: 50%;
+    height: 370px;
+    
+    width: 100%;
+    background-position:top;
     background-repeat: no-repeat;
     background-size: cover;
     overflow: hidden;
-    margin: 0 auto;
+   
     display: block;
+    
   }
 
-
+.link-card {
+  width: 100%;
+}
   
   
   
@@ -43,6 +46,7 @@ img {
 
   .info-item {
     margin-right: 10px;
+    font-size: 16px;
   }
 button.hidden{
   display: none;

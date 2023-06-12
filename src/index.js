@@ -79,7 +79,7 @@ function generateMarkUp() {
 function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
     return `   
     <div class="card photo-card">
-        <a href="${largeImageURL}">
+        <a href="${largeImageURL}" class="link-card">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300px" heigth="200px"/>
         </a>
         
