@@ -16,7 +16,7 @@ export default class imgAPIServer {
             this.incrementPage()
             return data
           })
-       
+          
        }
 
 
