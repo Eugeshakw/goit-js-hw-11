@@ -3,13 +3,20 @@ import Notiflix from 'notiflix';
 import  imgAPIServer from './js/newAPIserver'
 import loadmoreBtn from './js/loadmoreBtn'
 
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
+
+const lightbox = new SimpleLightbox(".gallery .link-card", {
+        delay: 500,
+});
 
 
 const refs = {
     form: document.getElementById('search-form'),
     gallery: document.querySelector('.gallery'),
     input: document.querySelector('.inp-search'),
-    btn: document.querySelector('.custom-button')
+    btn: document.querySelector('.custom-button'),
+    lightbox: document.querySelector('.lightbox')
 }
 
 
@@ -39,6 +46,8 @@ function  fetchArtical(){
         appendList(markup);
       loadBtn.enable();
     })
+
+   
 }
 
 
@@ -58,6 +67,7 @@ function onSubmit(event) {
     server.setSearchValue(inpValue);
     loadBtn.show();
     server.resetPage();
+    
     fetchArtical()
     .catch(onError)
     .finally(() => refs.form.reset());
@@ -79,7 +89,7 @@ function generateMarkUp() {
 function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
     return `   
     <div class="card photo-card">
-        <a href="${largeImageURL}" class="link-card">
+        <a href="${largeImageURL}" class="link-card" class="lightbox">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300px" heigth="200px"/>
         </a>
         
@@ -104,7 +114,9 @@ function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments
 };
 
 function appendList(markup) {
+    
     refs.gallery.insertAdjacentHTML('beforeend', markup);
+    lightbox.refresh();
 }
 
 function clearList() {
