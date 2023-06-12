@@ -3,11 +3,12 @@ import Notiflix from 'notiflix';
 import  imgAPIServer from './js/newAPIserver'
 import loadmoreBtn from './js/loadmoreBtn'
 
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
+import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 
 const lightbox = new SimpleLightbox(".gallery .link-card", {
         delay: 500,
+        captions: true,
 });
 
 
