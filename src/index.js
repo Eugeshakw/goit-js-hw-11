@@ -125,7 +125,7 @@ async function generateMarkUp() {
 return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
     
 } catch(err) {
-    clearList()
+    
     onError(err)
 }
 
@@ -183,11 +183,11 @@ function clearList() {
 function onError(){
     clearList();
     loadBtn.hide();
-    // Notiflix.Report.failure(
-    //     'Not Found',
-    //     'Sorry, there are no images matching your search query. Please try again.'
-    // );
-    Notiflix.Loading.remove();
+    Notiflix.Report.failure(
+        'Not Found',
+        'Sorry, there are no images matching your search query. Please try again.'
+    );
+    // Notiflix.Loading.remove();
     
 }
 
