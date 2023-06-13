@@ -108,11 +108,16 @@ async function generateMarkUp() {
         console.log(maxPage, nextPage);
         loadBtn.show()
         if(nextPage > maxPage){
-            Notiflix.Notify.info('no more pages');
+            Notiflix.Notify.info(`Were sorry, but you've reached the end of search results`)
             loadBtn.hide();
+            Notiflix.Report.info(
+                'End',
+                "We're sorry, but you've reached the end of search results.",
+                'Okay',
+                );
             
         }
-if (hits.length === 0) throw new Error ()
+        if (hits.length === 0) throw new Error ()
 
 
 
@@ -178,10 +183,26 @@ function clearList() {
 function onError(){
     clearList();
     loadBtn.hide();
-    Notiflix.Report.failure(
-        'Not Found',
-        'Sorry, there are no images matching your search query. Please try again.'
-    );
+    // Notiflix.Report.failure(
+    //     'Not Found',
+    //     'Sorry, there are no images matching your search query. Please try again.'
+    // );
     Notiflix.Loading.remove();
     
+}
+
+
+// !========Scrol==========
+
+window.addEventListener('scroll', handleScroll);
+
+function handleScroll(e){
+    
+
+    const {clientHeight, scrollTop, scrollHeight} = document.documentElement
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+        fetchArtical()
+    } 
+    
+
 }
