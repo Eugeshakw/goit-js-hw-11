@@ -11,7 +11,7 @@ const lightbox = new SimpleLightbox(".gallery .link-card", {
         captions: true,
 });
 
-let isFirstLoad = true;
+
 const refs = {
     form: document.getElementById('search-form'),
     gallery: document.querySelector('.gallery'),
@@ -56,7 +56,8 @@ async function  fetchArtical(){
     
     }
     } catch(err){
-        onError(err)
+        onErrorSearch()
+       
     }
     loadBtn.enable();
    
@@ -73,9 +74,7 @@ function onSubmit(event) {
     const inpValue = refs.form.elements.searchQuery.value.trim();
 
     if (inpValue === ''){
-        Notiflix.Report.failure(
-            'Sorry, there are no images matching your search query. Please try again.');
-        
+        CheckOnerrorSearch()
         return;
     }
     clearList()
@@ -85,7 +84,7 @@ function onSubmit(event) {
     server.resetPage();
     
     fetchArtical()
-    .catch()
+    
     .finally(() => refs.form.reset());
     
 }
@@ -106,13 +105,10 @@ async function generateMarkUp() {
         console.log(maxPage, nextPage);
         loadBtn.show()
         if(nextPage > maxPage){
-            Notiflix.Report.remove();
-            onInfo();
+            
+            onInfo()
             loadBtn.hide();
             
-            
-        }else if(hits.length === 0){
-             
         }
        
             
@@ -127,11 +123,9 @@ async function generateMarkUp() {
 return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
     
 } catch(err) {
-    if (totalHits === 0){
-        onError(err)
-    }
-    onInfo()
-    // onError(err)
+    
+    onErrorSearch(err)
+    
 }
 
 }
@@ -174,15 +168,20 @@ function clearList() {
 }
 
 function onInfo() {
-    Notiflix.Report.info(
+    Notiflix.Notify.info(
                 'End',
                 "We're sorry, but you've reached the end of search results.",
                 'Okay',
                 );
 }
 
-
-function onError(){
+function CheckOnerrorSearch() {
+    Notiflix.Report.failure(
+        'Please enter the string',
+        
+    )
+}
+function onErrorSearch(){
     
     loadBtn.hide();
     Notiflix.Report.failure(
@@ -204,6 +203,7 @@ function handleScroll(){
     const {clientHeight, scrollTop, scrollHeight} = document.documentElement
     if (scrollTop + clientHeight >= scrollHeight - 5) {
        fetchArtical() 
+       
     }
     
 
