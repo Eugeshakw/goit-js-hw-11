@@ -49,8 +49,9 @@ async function  fetchArtical(){
     const markup = await generateMarkUp() 
     appendList(markup);
    if (markup === undefined){
-   
-    onError()
+    
+    
+    
     }
     } catch(err){
         onError(err)
@@ -71,6 +72,7 @@ function onSubmit(event) {
 
     if (inpValue === ''){
         onError()
+        
         return;
     }
     clearList()
@@ -80,7 +82,7 @@ function onSubmit(event) {
     server.resetPage();
     
     fetchArtical()
-    .catch(onError)
+    .catch()
     .finally(() => refs.form.reset());
     
 }
@@ -101,13 +103,9 @@ async function generateMarkUp() {
         console.log(maxPage, nextPage);
         loadBtn.show()
         if(nextPage > maxPage){
-            Notiflix.Notify.info(`Were sorry, but you've reached the end of search results`)
+            
             loadBtn.hide();
-            Notiflix.Report.info(
-                'End',
-                "We're sorry, but you've reached the end of search results.",
-                'Okay',
-                );
+            
             
         }
         if (hits.length === 0) 
@@ -122,8 +120,8 @@ async function generateMarkUp() {
 return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
     
 } catch(err) {
-    
-    onError(err)
+    onInfo(err)
+    // onError(err)
 }
 
 }
@@ -165,8 +163,17 @@ function clearList() {
     refs.gallery.innerHTML = '';
 }
 
+function onInfo() {
+    Notiflix.Report.info(
+                'End',
+                "We're sorry, but you've reached the end of search results.",
+                'Okay',
+                );
+}
+
+
 function onError(){
-    clearList();
+    
     loadBtn.hide();
     Notiflix.Report.failure(
         'Not Found',
@@ -181,7 +188,7 @@ function onError(){
 
 window.addEventListener('scroll', handleScroll);
 
-function handleScroll(e){
+function handleScroll(){
     
 
     const {clientHeight, scrollTop, scrollHeight} = document.documentElement
