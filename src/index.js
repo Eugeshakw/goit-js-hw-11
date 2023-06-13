@@ -50,7 +50,7 @@ async function  fetchArtical(){
     appendList(markup);
    if (markup === undefined){
     
-    
+    clearList();
     
     }
     } catch(err){
@@ -109,7 +109,8 @@ async function generateMarkUp() {
             
         }
         if (hits.length === 0) 
-            throw new Error ()
+            // throw new Error ()
+            onInfo()
 
             
         
@@ -120,7 +121,9 @@ async function generateMarkUp() {
 return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
     
 } catch(err) {
-    onInfo(err)
+    if (totalHits === 0){
+        onError(err)
+    }
     // onError(err)
 }
 
@@ -194,6 +197,7 @@ function handleScroll(){
     const {clientHeight, scrollTop, scrollHeight} = document.documentElement
     if (scrollTop + clientHeight >= scrollHeight - 5) {
         fetchArtical()
+        
     } 
     
 
