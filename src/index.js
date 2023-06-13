@@ -89,12 +89,12 @@ async function generateMarkUp() {
     
     try{
         const {hits, totalHits} = await server.getApi()
-        // Notiflix.Notify.success(`found the ${totalHits} pictures`)
+        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
 
-        if (isFirstLoad){
-            Notiflix.Notify.success(`found the ${totalHits} pictures`)
-            isFirstLoad = false;
-        }
+        // if (isFirstLoad){
+        //     Notiflix.Notify.success(`found the ${totalHits} pictures`)
+        //     isFirstLoad = false;
+        // }
 
         const nextPage = server.page;
         const maxPage = Math.ceil(totalHits / 40 )
