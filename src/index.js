@@ -29,7 +29,7 @@ const loadBtn = new loadmoreBtn({
 
 
 refs.form.addEventListener('submit', onSubmit);
-loadBtn.button.addEventListener('click', fetchArtical);
+loadBtn.button.addEventListener('click', generateMarkUp);
 
 refs.input.addEventListener('click', dropBtn);
 
@@ -42,10 +42,12 @@ function dropBtn(){
 
 async function  fetchArtical(){
     
+  
+    
     loadBtn.disable() 
     try {
         
-
+       
     const markup = await generateMarkUp() 
     appendList(markup);
    if (markup === undefined){
@@ -71,7 +73,8 @@ function onSubmit(event) {
     const inpValue = refs.form.elements.searchQuery.value.trim();
 
     if (inpValue === ''){
-        onError()
+        Notiflix.Report.failure(
+            'Sorry, there are no images matching your search query. Please try again.');
         
         return;
     }
@@ -103,14 +106,17 @@ async function generateMarkUp() {
         console.log(maxPage, nextPage);
         loadBtn.show()
         if(nextPage > maxPage){
-            
+            Notiflix.Report.remove();
+            onInfo();
             loadBtn.hide();
             
             
+        }else if(hits.length === 0){
+             
         }
-        if (hits.length === 0) 
-            // throw new Error ()
-            onInfo()
+       
+            
+            
 
             
         
@@ -124,6 +130,7 @@ return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,''
     if (totalHits === 0){
         onError(err)
     }
+    onInfo()
     // onError(err)
 }
 
@@ -179,8 +186,8 @@ function onError(){
     
     loadBtn.hide();
     Notiflix.Report.failure(
-        'Not Found',
-        'Sorry, there are no images matching your search query. Please try again.'
+        'Sorry, there are no images matching your search query. Please try again.',
+        
     );
     // Notiflix.Loading.remove();
     
@@ -196,9 +203,8 @@ function handleScroll(){
 
     const {clientHeight, scrollTop, scrollHeight} = document.documentElement
     if (scrollTop + clientHeight >= scrollHeight - 5) {
-        fetchArtical()
-        
-    } 
+       fetchArtical() 
+    }
     
 
 }
