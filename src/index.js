@@ -11,7 +11,7 @@ const lightbox = new SimpleLightbox(".gallery .link-card", {
         captions: true,
 });
 
-
+let isFirstLoad = true;
 const refs = {
     form: document.getElementById('search-form'),
     gallery: document.querySelector('.gallery'),
@@ -40,13 +40,30 @@ function dropBtn(){
 
 
 
-function  fetchArtical(){
-    loadBtn.disable()
-   return generateMarkUp()
-   .then((markup) =>{
-        appendList(markup);
-      loadBtn.enable();
-    })
+async function  fetchArtical(){
+    
+    loadBtn.disable() 
+    try {
+        
+
+    const markup = await generateMarkUp() 
+    appendList(markup);
+   if (markup === undefined){
+    
+    onError()
+}
+    } catch(err){
+        onError(err)
+    }
+    loadBtn.enable();
+   
+    
+
+//    return generateMarkUp()
+//    .then((markup) =>{
+//         appendList(markup);
+//       loadBtn.enable();
+//     })
 
    
 }
@@ -66,7 +83,7 @@ function onSubmit(event) {
     clearList()
 
     server.setSearchValue(inpValue);
-    loadBtn.show();
+    
     server.resetPage();
     
     fetchArtical()
@@ -75,17 +92,50 @@ function onSubmit(event) {
     
 }
 
-function generateMarkUp() {
-   return server.getApi()
-    .then(({hits}) => {
-        if (hits.length === 0){
-            throw new Error ()
-          
+async function generateMarkUp() {
+    
+    try{
+        const {hits, totalHits} = await server.getApi()
+        // Notiflix.Notify.success(`found the ${totalHits} pictures`)
+
+        if (isFirstLoad){
+            Notiflix.Notify.success(`found the ${totalHits} pictures`)
+            isFirstLoad = false;
         }
-        Notiflix.Notify.success(`found the pictures`)
-        console.log(hits.length);
-       return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
-    })
+
+        const nextPage = server.page;
+        const maxPage = Math.ceil(totalHits / 40 )
+        console.log(maxPage, nextPage);
+        loadBtn.show()
+        if(nextPage > maxPage){
+            Notiflix.Notify.info('no more pages');
+            loadBtn.hide();
+            
+        }
+if (hits.length === 0) throw new Error ()
+
+
+
+
+return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
+    
+} catch(err) {
+    clearList()
+    onError(err)
+}
+
+
+
+//    return server.getApi()
+//     .then(({hits}) => {
+//         if (hits.length === 0){
+//             throw new Error ()
+          
+//         }
+//         Notiflix.Notify.success(`found the pictures`)
+//         console.log(hits.length);
+//        return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
+//     })
 }
 
 function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
@@ -126,6 +176,8 @@ function clearList() {
 }
 
 function onError(){
+    clearList();
+    loadBtn.hide();
     Notiflix.Report.failure(
         'Not Found',
         'Sorry, there are no images matching your search query. Please try again.'
