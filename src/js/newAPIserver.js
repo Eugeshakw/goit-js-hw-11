@@ -17,29 +17,7 @@ export default class imgAPIServer {
         const res = await axios.get(url);
         
         this.incrementPage();
-        return res.data;
-
-
-        
-            
-
-        
-
-        
-        
-        // return axios.get(url).then((r) => {
-        //     this.incrementPage()
-        //     return r.data;
-        //   })
-
-
-          // !===============Fetch
-
-          // return fetch(url).then((r) => r.json()).then(data => {
-          //   this.incrementPage()
-          //   return data
-          // })
-          
+        return res.data;      
        }
 
 

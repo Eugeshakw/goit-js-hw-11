@@ -49,22 +49,15 @@ async function  fetchArtical(){
     const markup = await generateMarkUp() 
     appendList(markup);
    if (markup === undefined){
-    
+   
     onError()
-}
+    }
     } catch(err){
         onError(err)
     }
     loadBtn.enable();
    
     
-
-//    return generateMarkUp()
-//    .then((markup) =>{
-//         appendList(markup);
-//       loadBtn.enable();
-//     })
-
    
 }
 
@@ -117,8 +110,12 @@ async function generateMarkUp() {
                 );
             
         }
-        if (hits.length === 0) throw new Error ()
+        if (hits.length === 0) 
+            throw new Error ()
 
+            
+        
+       
 
 
 
@@ -129,18 +126,6 @@ return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,''
     onError(err)
 }
 
-
-
-//    return server.getApi()
-//     .then(({hits}) => {
-//         if (hits.length === 0){
-//             throw new Error ()
-          
-//         }
-//         Notiflix.Notify.success(`found the pictures`)
-//         console.log(hits.length);
-//        return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
-//     })
 }
 
 function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
