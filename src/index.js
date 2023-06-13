@@ -56,7 +56,7 @@ async function  fetchArtical(){
     
     }
     } catch(err){
-        onErrorSearch()
+        onError()
        
     }
     loadBtn.enable();
@@ -74,7 +74,7 @@ function onSubmit(event) {
     const inpValue = refs.form.elements.searchQuery.value.trim();
 
     if (inpValue === ''){
-        CheckOnerrorSearch()
+        onError();
         return;
     }
     clearList()
@@ -94,7 +94,9 @@ async function generateMarkUp() {
     try{
         const {hits, totalHits} = await server.getApi()
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
-
+        if(hits.length === 0){
+            onError()
+        }
         // if (isFirstLoad){
         //     Notiflix.Notify.success(`found the ${totalHits} pictures`)
         //     isFirstLoad = false;
@@ -106,7 +108,7 @@ async function generateMarkUp() {
         loadBtn.show()
         if(nextPage > maxPage){
             
-            onInfo()
+            
             loadBtn.hide();
             
         }
@@ -124,7 +126,7 @@ return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,''
     
 } catch(err) {
     
-    onErrorSearch(err)
+    onError(err)
     
 }
 
@@ -167,21 +169,10 @@ function clearList() {
     refs.gallery.innerHTML = '';
 }
 
-function onInfo() {
-    Notiflix.Notify.info(
-                'End',
-                "We're sorry, but you've reached the end of search results.",
-                'Okay',
-                );
-}
 
-function CheckOnerrorSearch() {
-    Notiflix.Report.failure(
-        'Please enter the string',
-        
-    )
-}
-function onErrorSearch(){
+
+
+function onError(){
     
     loadBtn.hide();
     Notiflix.Report.failure(
