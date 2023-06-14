@@ -23,7 +23,7 @@ export default class imgAPIServer {
                 orientation: 'horizontal',
                 q: this.searchValue,
                 page: this.page,
-                per_page: 40,
+                per_page: this.per_page,
                 key: this.#KEY_API,
                 safesearch: true,
             },
