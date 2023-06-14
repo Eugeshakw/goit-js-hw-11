@@ -1,7 +1,7 @@
 import axios from "axios"
 
-
-
+// const KEY_API = '37175835-76686085e99d052827f14fa60'
+// const BASE_URL = 'https://pixabay.com/api/'
 
 export default class imgAPIServer {
     #KEY_API = '37175835-76686085e99d052827f14fa60'
@@ -10,7 +10,7 @@ export default class imgAPIServer {
     constructor() {
         this.page = 1,
         this.searchValue = ''        
-
+        this.perPage = 40;
     }
     
     
@@ -23,7 +23,7 @@ export default class imgAPIServer {
                 orientation: 'horizontal',
                 q: this.searchValue,
                 page: this.page,
-                per_page: this.per_page,
+                per_page: this.perPage,
                 key: this.#KEY_API,
                 safesearch: true,
             },

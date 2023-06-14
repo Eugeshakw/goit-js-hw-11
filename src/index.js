@@ -63,19 +63,20 @@ async function  fetchArtical(){
 
 function onSubmit(event) {
     event.preventDefault();
-    
+    clearList()
     const inpValue = refs.form.elements.searchQuery.value.trim();
 
     if (inpValue === ''){
-        Notiflix.Report.failure('Invalid');
+        Notiflix.Report.failure("Empty search", "Please put your request");
         return;
-    }
+    } 
     
 
     server.setSearchValue(inpValue);
     
     server.resetPage();
     
+
     fetchArtical()
     .catch(onError)
     .finally(() => refs.form.reset());
@@ -87,8 +88,36 @@ async function generateMarkUp() {
     try {
 
         const {hits, totalHits} = await server.getApi()
+
+        
+        console.log(totalHits);
+        console.log(server.perPage);
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
-        if(hits.length === 0) throw new Error()
+        if (totalHits > server.perPage) {
+            window.addEventListener('scroll', handleScroll);
+            
+            function handleScroll(){
+                    
+
+                    const {clientHeight, scrollTop, scrollHeight} = document.documentElement
+                if (scrollTop + clientHeight >= scrollHeight - 5) {
+                    fetchArtical() 
+       
+                }
+            }
+        } else if(totalHits > 0){
+            
+            Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+               
+        }
+            
+        
+            
+        
+        
+        if(hits.length === 0){
+            // clearList();
+        }
             
         
         return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
@@ -165,7 +194,7 @@ function clearList() {
 function onError(){
     clearList()
     loadBtn.hide();
-    Notiflix.Report.failure(
+    Notiflix.Report.failure("Bad Request",
         'Sorry, there are no images matching your search query. Please try again.',
         
     );
@@ -179,16 +208,16 @@ function onError(){
 
 // !========Scrol==========
 
-window.addEventListener('scroll', handleScroll);
+// window.addEventListener('scroll', handleScroll);
 
-function handleScroll(){
+// function handleScroll(){
     
 
-    const {clientHeight, scrollTop, scrollHeight} = document.documentElement
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
-       fetchArtical() 
+//     const {clientHeight, scrollTop, scrollHeight} = document.documentElement
+//     if (scrollTop + clientHeight >= scrollHeight - 5) {
+//        fetchArtical() 
        
-    }
+//     }
     
 
-}
+// }
