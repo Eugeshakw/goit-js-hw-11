@@ -96,6 +96,7 @@ async function generateMarkUp() {
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
         if(hits.length === 0){
             onError()
+            
         }
         // if (isFirstLoad){
         //     Notiflix.Notify.success(`found the ${totalHits} pictures`)
