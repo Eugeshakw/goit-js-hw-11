@@ -90,6 +90,21 @@ async function generateMarkUp() {
         
         const {hits, totalHits} = await server.getApi()
 
+        const nextPage = server.page;
+        console.log(nextPage);
+        const maxPage = Math.ceil(totalHits / 40);
+        console.log(maxPage);
+        loadBtn.show()
+        if(nextPage > maxPage) {
+            
+            Notiflix.Notify.info(
+                "We're sorry, but you've reached the end of search results."
+              );
+            loadBtn.hide();
+            
+        }
+
+
         if (totalHits > 0 && !submitNotificationShown) {
             Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
             submitNotificationShown = true;
@@ -119,8 +134,8 @@ async function generateMarkUp() {
                 top: cardHeight * 2,
                 behavior: "smooth",
                 });
-
-                fetchArtical();
+                // onSubmit()
+                // fetchArtical();
                 shouldScroll = false;
             } else {
                 shouldScroll = true;
@@ -133,16 +148,7 @@ async function generateMarkUp() {
         
         onError(err)
     }
-        const nextPage = server.page;
-        const maxPage = Math.ceil(totalHits / 40 )
-        console.log(maxPage, nextPage);
-        loadBtn.show()
-        if(nextPage > maxPage) {
-            
-            
-            loadBtn.hide();
-            
-        }    
+          
 }
 
 function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
