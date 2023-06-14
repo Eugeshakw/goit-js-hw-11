@@ -88,7 +88,12 @@ async function generateMarkUp() {
     try {
 
         const {hits, totalHits} = await server.getApi()
-
+        
+        if(totalHits > 0){
+            
+            Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+               
+        }
         
         console.log(totalHits);
         console.log(server.perPage);
@@ -117,11 +122,7 @@ async function generateMarkUp() {
                 shouldScroll = true;
             }
             }
-        } else if(totalHits > 0){
-            
-            Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-               
-        }
+        } 
             
         
             
