@@ -46,11 +46,15 @@ async function  fetchArtical(){
     try{
     const markup = await generateMarkUp() 
     
+    if(markup === undefined){
+        throw new Error('No markup')
+    }
     
     appendList(markup);
 
     } catch(err) {
         onError(err);
+       
     }
     loadBtn.enable();
     
@@ -75,7 +79,7 @@ function onSubmit(event) {
     
     server.resetPage();
     
-
+    
     fetchArtical()
     .catch(onError)
     .finally(() => refs.form.reset());
@@ -91,9 +95,9 @@ async function generateMarkUp() {
         const {hits, totalHits} = await server.getApi()
 
         const nextPage = server.page;
-        console.log(nextPage);
+        // console.log(nextPage);
         const maxPage = Math.ceil(totalHits / 40);
-        console.log(maxPage);
+        // console.log(maxPage);
         loadBtn.show()
        
 
