@@ -92,18 +92,30 @@ async function generateMarkUp() {
         
         console.log(totalHits);
         console.log(server.perPage);
-        Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
+        
         if (totalHits > server.perPage) {
             window.addEventListener('scroll', handleScroll);
             
-            function handleScroll(){
-                    
+            let shouldScroll = false;
 
-                    const {clientHeight, scrollTop, scrollHeight} = document.documentElement
-                if (scrollTop + clientHeight >= scrollHeight - 5) {
-                    fetchArtical() 
-       
-                }
+            function handleScroll() {
+            const { clientHeight, scrollTop, scrollHeight } = document.documentElement;
+
+            if (shouldScroll && scrollTop + clientHeight >= scrollHeight - 5) {
+                const { height: cardHeight } = document
+                .querySelector(".gallery")
+                .firstElementChild.getBoundingClientRect();
+
+                window.scrollBy({
+                top: cardHeight * 2,
+                behavior: "smooth",
+                });
+
+                fetchArtical();
+                shouldScroll = false;
+            } else {
+                shouldScroll = true;
+            }
             }
         } else if(totalHits > 0){
             
