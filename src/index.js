@@ -94,21 +94,21 @@ async function generateMarkUp() {
         
         const {hits, totalHits} = await server.getApi()
 
-        const nextPage = server.page;
+        // const nextPage = server.page;
         // console.log(nextPage);
-        const maxPage = Math.ceil(totalHits / 40);
+        // const maxPage = Math.ceil(totalHits / 40);
         // console.log(maxPage);
-        loadBtn.show()
+        // loadBtn.show()
        
         
         
 
-        if(nextPage > maxPage) {
+        // if(nextPage > maxPage) {
           
-            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-            loadBtn.hide();
+        //     Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+        //     loadBtn.hide();
             
-        }
+        // }
 
 
         if (totalHits > 0 && !submitNotificationShown) {
@@ -152,6 +152,22 @@ async function generateMarkUp() {
             }
             }
         } 
+        const nextPage = server.page;
+        console.log(nextPage);
+        const maxPage = Math.ceil(totalHits / 40);
+        console.log(maxPage);
+        loadBtn.show()
+       
+        
+        
+
+        if(nextPage > maxPage) {
+          
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+            loadBtn.hide();
+            
+        }
+
         return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
        
     } catch(err){
