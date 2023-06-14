@@ -63,6 +63,7 @@ async function  fetchArtical(){
 
 function onSubmit(event) {
     event.preventDefault();
+    submitNotificationShown = false;
     clearList()
     const inpValue = refs.form.elements.searchQuery.value.trim();
 
@@ -83,20 +84,23 @@ function onSubmit(event) {
     
 }
 
+    let submitNotificationShown = false;
+
 async function generateMarkUp() {
     
     try {
 
         const {hits, totalHits} = await server.getApi()
-        
-        if(totalHits > 0){
-            
+
+        if (totalHits > 0 && !submitNotificationShown) {
             Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-               
+            submitNotificationShown = true;
         }
+            // Notiflix.Notify.remove('success-notiflix')
         
-        console.log(totalHits);
-        console.log(server.perPage);
+        
+        // console.log(totalHits);
+        // console.log(server.perPage);
         
         if (totalHits > server.perPage) {
             window.addEventListener('scroll', handleScroll);
