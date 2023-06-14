@@ -54,7 +54,7 @@ async function  fetchArtical(){
 
     } catch(err) {
         onError(err);
-       
+        
     }
     loadBtn.enable();
     
@@ -100,18 +100,15 @@ async function generateMarkUp() {
         // console.log(maxPage);
         loadBtn.show()
        
-
+        
         
 
         if(nextPage > maxPage) {
           
-            Notiflix.Notify.info(
-                "We're sorry, but you've reached the end of search results."
-              );
-
+            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
             loadBtn.hide();
             
-        }
+        }}
 
 
         if (totalHits > 0 && !submitNotificationShown) {
