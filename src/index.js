@@ -29,7 +29,7 @@ const loadBtn = new loadmoreBtn({
 
 
 refs.form.addEventListener('submit', onSubmit);
-loadBtn.button.addEventListener('click', generateMarkUp);
+loadBtn.button.addEventListener('click', fetchArtical);
 
 refs.input.addEventListener('click', dropBtn);
 
@@ -42,27 +42,20 @@ function dropBtn(){
 
 async function  fetchArtical(){
     
-  
-    
-    loadBtn.disable() 
-    try {
-        
-       
+   loadBtn.disable() 
+    try{
     const markup = await generateMarkUp() 
-    appendList(markup);
-   if (markup === undefined){
-    
-    clearList();
-    
+    if(markup === undefined) {
+      
     }
-    } catch(err){
-        onError()
-       
+    
+    appendList(markup);
+
+    } catch(err) {
+        onError(err);
     }
     loadBtn.enable();
-   
     
-   
 }
 
 
@@ -74,30 +67,38 @@ function onSubmit(event) {
     const inpValue = refs.form.elements.searchQuery.value.trim();
 
     if (inpValue === ''){
-        onError();
+        Notiflix.Report.failure('Invalid');
         return;
     }
-    clearList()
+    
 
     server.setSearchValue(inpValue);
     
     server.resetPage();
     
     fetchArtical()
-    
+    .catch(onError)
     .finally(() => refs.form.reset());
     
 }
 
 async function generateMarkUp() {
     
-    try{
+    try {
+
         const {hits, totalHits} = await server.getApi()
         Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`)
-        if(hits.length === 0){
-            onError()
+        if(hits.length === 0) throw new Error()
             
-        }
+        
+        return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
+
+    } catch(err){
+
+        onError(err)
+    }
+        
+    
         // if (isFirstLoad){
         //     Notiflix.Notify.success(`found the ${totalHits} pictures`)
         //     isFirstLoad = false;
@@ -107,29 +108,15 @@ async function generateMarkUp() {
         const maxPage = Math.ceil(totalHits / 40 )
         console.log(maxPage, nextPage);
         loadBtn.show()
-        if(nextPage > maxPage){
+        if(nextPage > maxPage) {
             
             
             loadBtn.hide();
             
-        }
-       
-            
-            
-
-            
+        }    
         
-       
+      
 
-
-
-return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
-    
-} catch(err) {
-    
-    onError(err)
-    
-}
 
 }
 
@@ -173,13 +160,18 @@ function clearList() {
 
 
 
+
+
 function onError(){
-    
+    clearList()
     loadBtn.hide();
     Notiflix.Report.failure(
         'Sorry, there are no images matching your search query. Please try again.',
         
     );
+    clearList()
+    appendList()
+
     // Notiflix.Loading.remove();
     
 }
