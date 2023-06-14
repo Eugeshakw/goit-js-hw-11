@@ -45,9 +45,7 @@ async function  fetchArtical(){
    loadBtn.disable() 
     try{
     const markup = await generateMarkUp() 
-    if(markup === undefined) {
-      
-    }
+    
     
     appendList(markup);
 
@@ -89,13 +87,15 @@ function onSubmit(event) {
 async function generateMarkUp() {
     
     try {
-
+        
         const {hits, totalHits} = await server.getApi()
 
         if (totalHits > 0 && !submitNotificationShown) {
             Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
             submitNotificationShown = true;
         }
+
+        if(hits.length === 0) throw new Error();
             // Notiflix.Notify.remove('success-notiflix')
         
         
@@ -127,29 +127,12 @@ async function generateMarkUp() {
             }
             }
         } 
-            
-        
-            
-        
-        
-        if(hits.length === 0){
-            // clearList();
-        }
-            
-        
         return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
-
+       
     } catch(err){
-
+        
         onError(err)
     }
-        
-    
-        // if (isFirstLoad){
-        //     Notiflix.Notify.success(`found the ${totalHits} pictures`)
-        //     isFirstLoad = false;
-        // }
-
         const nextPage = server.page;
         const maxPage = Math.ceil(totalHits / 40 )
         console.log(maxPage, nextPage);
@@ -160,10 +143,6 @@ async function generateMarkUp() {
             loadBtn.hide();
             
         }    
-        
-      
-
-
 }
 
 function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
@@ -209,14 +188,14 @@ function clearList() {
 
 
 function onError(){
-    clearList()
+    // clearList()
     loadBtn.hide();
     Notiflix.Report.failure("Bad Request",
         'Sorry, there are no images matching your search query. Please try again.',
         
     );
-    clearList()
-    appendList()
+    // clearList()
+    // appendList()
 
     // Notiflix.Loading.remove();
     
