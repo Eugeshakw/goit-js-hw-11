@@ -64,7 +64,7 @@ function onSubmit(event) {
     submitNotificationShown = false;
     clearList()
     const inpValue = refs.form.elements.searchQuery.value.trim();
-
+    
     if (inpValue === ''){
         Notiflix.Report.failure("Empty search", "Please put your request");
         return;
@@ -95,11 +95,16 @@ async function generateMarkUp() {
         const maxPage = Math.ceil(totalHits / 40);
         console.log(maxPage);
         loadBtn.show()
+       
+
+        
+
         if(nextPage > maxPage) {
-            
+          
             Notiflix.Notify.info(
                 "We're sorry, but you've reached the end of search results."
               );
+
             loadBtn.hide();
             
         }
@@ -116,6 +121,10 @@ async function generateMarkUp() {
         
         // console.log(totalHits);
         // console.log(server.perPage);
+
+
+       
+       
         
         if (totalHits > server.perPage) {
             window.addEventListener('scroll', handleScroll);
