@@ -1,192 +1,112 @@
 import Notiflix from 'notiflix';
-// import { getApi } from './js/pixabayapi'
-import  imgAPIServer from './js/newAPIserver'
-import loadmoreBtn from './js/loadmoreBtn'
-
-import SimpleLightbox from 'simplelightbox';
+import imgAPIServer from './js/newAPIserver';
+import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
-
-const lightbox = new SimpleLightbox(".gallery .link-card", {
-        delay: 500,
-        captions: true,
+const lightbox = new SimpleLightbox('.gallery .lightbox', {
+  delay: 500,
+  captions: true,
 });
-
-
+let onSearch = false;
+let submitNotificationShown = false;
 const refs = {
-    form: document.getElementById('search-form'),
-    gallery: document.querySelector('.gallery'),
-    input: document.querySelector('.inp-search'),
-    btn: document.querySelector('.custom-button'),
-    lightbox: document.querySelector('.lightbox')
-}
-
-
-const server   = new imgAPIServer()
-const loadBtn = new loadmoreBtn({
-    selector: '#loadmore',
-    isHidden: true
-})
-
-
+  form: document.getElementById('search-form'),
+  gallery: document.querySelector('.gallery'),
+  input: document.querySelector('.inp-search'),
+  btn: document.querySelector('.custom-button'),
+  lightbox: document.querySelector('.lightbox'),
+};
+const server = new imgAPIServer();
+const observer = new IntersectionObserver(
+  (entries, observer) => {
+    if (entries[0].isIntersecting && onSearch) {
+      fetchArtical();
+    }
+  },
+  {
+    root: null,
+    rootMargin: '600px',
+    threshold: 1,
+  }
+);
 refs.form.addEventListener('submit', onSubmit);
-loadBtn.button.addEventListener('click', fetchArtical);
-
 refs.input.addEventListener('click', dropBtn);
-
-function dropBtn(){
-    refs.btn.style.display = 'block'
+function dropBtn() {
+  refs.btn.style.display = 'block';
 }
-
-
-
-
-async function  fetchArtical(){
-    
-   loadBtn.disable() 
-    try{
-    const markup = await generateMarkUp() 
-    
-    if(markup === undefined){
-        throw new Error('No markup')
-    }
-    
+async function fetchArtical() {
+  try {
+    const markup = await generateMarkUp();
     appendList(markup);
-
-    } catch(err) {
-        onError(err);
-        
-    }
-    loadBtn.enable();
-    
+  } catch (err) {
+    onError(err);
+  }
 }
-
-
-
-
 function onSubmit(event) {
-    event.preventDefault();
-    submitNotificationShown = false;
-    clearList()
-    const inpValue = refs.form.elements.searchQuery.value.trim();
-    
-    if (inpValue === ''){
-        Notiflix.Report.failure("Empty search", "Please put your request");
-        return;
-    } 
-    
-
-    server.setSearchValue(inpValue);
-    
-    server.resetPage();
-    
-    
-    fetchArtical()
+  event.preventDefault();
+  submitNotificationShown = false;
+  clearList();
+  Notiflix.Loading.pulse();
+  const inpValue = refs.form.elements.searchQuery.value.trim();
+  if (inpValue === "") {
+    Notiflix.Report.failure("Empty search", "Please put your request");
+    Notiflix.Loading.remove();
+    return;
+  }
+  server.setSearchValue(inpValue);
+  server.resetPage();
+  fetchArtical()
     .catch(onError)
-    .finally(() => refs.form.reset());
-    
+    .finally(() => {
+      refs.form.reset();
+      onSearch = true;
+    });
+  observer.observe(document.querySelector('.target-element'));
+  onSearch = false;
 }
-
-    let submitNotificationShown = false;
-
 async function generateMarkUp() {
-    
-    try {
-        
-        const {hits, totalHits} = await server.getApi()
-
-        // const nextPage = server.page;
-        // console.log(nextPage);
-        // const maxPage = Math.ceil(totalHits / 40);
-        // console.log(maxPage);
-        // loadBtn.show()
-       
-        
-        
-
-        // if(nextPage > maxPage) {
-          
-        //     Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-        //     loadBtn.hide();
-            
-        // }
-
-
-        if (totalHits > 0 && !submitNotificationShown) {
-            Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
-            submitNotificationShown = true;
-        }
-
-        if(hits.length === 0) throw new Error();
-            // Notiflix.Notify.remove('success-notiflix')
-        
-        
-        // console.log(totalHits);
-        // console.log(server.perPage);
-
-
-       
-       
-        
-        if (totalHits > server.perPage) {
-            window.addEventListener('scroll', handleScroll);
-            
-            let shouldScroll = false;
-
-            function handleScroll() {
-            const { clientHeight, scrollTop, scrollHeight } = document.documentElement;
-
-            if (shouldScroll && scrollTop + clientHeight >= scrollHeight - 5) {
-                const { height: cardHeight } = document
-                .querySelector(".gallery")
-                .firstElementChild.getBoundingClientRect();
-                // fetchArtical();
-                window.scrollBy({
-                top: cardHeight * 2,
-                behavior: "smooth",
-                });
-                // onSubmit()
-                // fetchArtical();
-                shouldScroll = false;
-            } else {
-                shouldScroll = true;
-            }
-            }
-        } 
-        const nextPage = server.page;
-        console.log(nextPage);
-        const maxPage = Math.ceil(totalHits / 40);
-        console.log(maxPage);
-        loadBtn.show()
-       
-        
-        
-
-        if(nextPage > maxPage) {
-          
-            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
-            loadBtn.hide();
-            
-        }
-
-        return hits.reduce((markup, currentimg) => markup + createMarkUp(currentimg) ,'')
-       
-    } catch(err){
-        
-        onError(err)
+    Notiflix.Loading.pulse();
+  try {
+    const { hits, totalHits } = await server.getApi();
+    Notiflix.Loading.remove();
+    if (totalHits > 0 && !submitNotificationShown) {
+      Notiflix.Notify.success(`Hooray! We found ${totalHits} images.`);
+      submitNotificationShown = true;
     }
-          
+    const nextPage = server.page - 1;
+    const maxPage = Math.ceil(totalHits / 40);
+    if (nextPage === maxPage && onSearch) {
+      Notiflix.Notify.info(
+        "We're sorry, but you've reached the end of search results."
+      );
+      observer.unobserve(document.querySelector('.target-element'));
+    }
+    if (totalHits < server.perPage) {
+      observer.unobserve(document.querySelector('.target-element'));
+    }
+    return hits.reduce(
+      (markup, currentimg) => markup + createMarkUp(currentimg),
+      ""
+    );
+  } catch (err) {
+    onError(err);
+  }
 }
-
-function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments, downloads}) {
-    return `   
+function createMarkUp({
+  webformatURL,
+  largeImageURL,
+  tags,
+  likes,
+  views,
+  comments,
+  downloads,
+}) {
+  return `
     <div class="card photo-card">
         <a href="${largeImageURL}" class="link-card" class="lightbox">
             <img src="${webformatURL}" alt="${tags}" loading="lazy" width="300px" heigth="200px"/>
         </a>
-        
          <div class="info">
             <p class="info-item">
-
             <b>Likes:</br>${likes}</b>
             </p>
             <p class="info-item">
@@ -200,52 +120,26 @@ function createMarkUp({webformatURL, largeImageURL, tags, likes, views, comments
             </p>
         </div>
     </div>
-  
-  `   
-};
-
+  `;
+}
 function appendList(markup) {
-    
-    refs.gallery.insertAdjacentHTML('beforeend', markup);
-    lightbox.refresh();
+  refs.gallery.insertAdjacentHTML('beforeend', markup);
+  lightbox.refresh();
+  const { height: cardHeight } = document
+    .querySelector('.gallery')
+    .firstElementChild.getBoundingClientRect();
+  window.scrollBy({
+    top: cardHeight * 2,
+    behavior: 'smooth',
+  });
 }
-
 function clearList() {
-    refs.gallery.innerHTML = '';
+  refs.gallery.innerHTML = "";
 }
-
-
-
-
-
-
-function onError(){
-    // clearList()
-    loadBtn.hide();
-    Notiflix.Report.failure("Bad Request",
-        'Sorry, there are no images matching your search query. Please try again.',
-        
-    );
-    // clearList()
-    // appendList()
-
-    // Notiflix.Loading.remove();
-    
+function onError() {
+  Notiflix.Report.failure(
+    "Bad Request",
+    "Sorry, there are no images matching your search query. Please try again."
+  );
+  Notiflix.Loading.remove();
 }
-
-
-// !========Scrol==========
-
-// window.addEventListener('scroll', handleScroll);
-
-// function handleScroll(){
-    
-
-//     const {clientHeight, scrollTop, scrollHeight} = document.documentElement
-//     if (scrollTop + clientHeight >= scrollHeight - 5) {
-//        fetchArtical() 
-       
-//     }
-    
-
-// }
