@@ -139,7 +139,7 @@ async function generateMarkUp() {
                 const { height: cardHeight } = document
                 .querySelector(".gallery")
                 .firstElementChild.getBoundingClientRect();
-                
+                // fetchArtical();
                 window.scrollBy({
                 top: cardHeight * 2,
                 behavior: "smooth",
