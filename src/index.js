@@ -1,8 +1,8 @@
 import Notiflix from 'notiflix';
 import imgAPIServer from './js/newAPIserver';
-import SimpleLightbox from "simplelightbox";
+import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-const lightbox = new SimpleLightbox('.gallery .lightbox', {
+const lightbox = new SimpleLightbox('.gallery .link-card', {
   delay: 500,
   captions: true,
 });
